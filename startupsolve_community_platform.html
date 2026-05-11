@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>StartupSolve</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0D0F14;--bg2:#13161E;--bg3:#1A1E28;--bg4:#222737;
+    --border:#2A2F3E;--border2:#343A4D;
+    --text:#F0F2F8;--text2:#9AA0B5;--text3:#636879;
+    --accent:#4F7CFF;--accent2:#3D65E8;--accent-glow:rgba(79,124,255,0.18);
+    --green:#2DD4A0;--amber:#F5A623;--red:#FF5E5E;--purple:#A78BFA;
+    --radius:10px;--radius-lg:16px;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+  /* NAV */
+  nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+  .nav-logo{font-family:'Sora',sans-serif;font-weight:700;font-size:1.2rem;color:var(--text);display:flex;align-items:center;gap:8px}
+  .logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent)}
+  .nav-links{display:flex;gap:1.5rem;align-items:center}
+  .nav-links a{color:var(--text2);text-decoration:none;font-size:.875rem;transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{background:var(--accent);color:#fff;border:none;padding:.5rem 1.1rem;border-radius:var(--radius);font-size:.875rem;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:background .2s}
+  .nav-cta:hover{background:var(--accent2)}
+  .badge-count{background:var(--accent-glow);color:var(--accent);font-size:11px;padding:2px 7px;border-radius:20px;border:1px solid rgba(79,124,255,0.3)}
+
+  /* HERO */
+  .hero{text-align:center;padding:4rem 2rem 3rem;max-width:700px;margin:0 auto}
+  .hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--accent-glow);color:var(--accent);font-size:.8rem;padding:.35rem .9rem;border-radius:20px;border:1px solid rgba(79,124,255,0.3);margin-bottom:1.5rem;font-weight:500}
+  .hero h1{font-family:'Sora',sans-serif;font-size:2.6rem;font-weight:700;line-height:1.2;margin-bottom:1rem;letter-spacing:-.03em}
+  .hero h1 span{color:var(--accent)}
+  .hero p{color:var(--text2);font-size:1rem;line-height:1.7;margin-bottom:2rem;max-width:520px;margin-left:auto;margin-right:auto}
+  .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn-primary{background:var(--accent);color:#fff;border:none;padding:.65rem 1.4rem;border-radius:var(--radius);font-size:.9rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+  .btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+  .btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border2);padding:.65rem 1.4rem;border-radius:var(--radius);font-size:.9rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+  .btn-secondary:hover{background:var(--bg3);border-color:var(--accent)}
+
+  /* STATS */
+  .stats-bar{display:flex;justify-content:center;gap:2.5rem;padding:1.5rem 2rem 2.5rem;border-bottom:1px solid var(--border)}
+  .stat{text-align:center}
+  .stat-num{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:700;color:var(--text)}
+  .stat-label{font-size:.8rem;color:var(--text3);margin-top:2px}
+
+  /* MAIN LAYOUT */
+  .main{display:grid;grid-template-columns:220px 1fr 260px;gap:1.5rem;max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+  /* SIDEBAR */
+  .sidebar{display:flex;flex-direction:column;gap:.5rem}
+  .sidebar-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:.5rem .75rem;font-weight:500}
+  .cat-item{display:flex;align-items:center;justify-content:space-between;padding:.55rem .75rem;border-radius:var(--radius);cursor:pointer;transition:background .2s;font-size:.875rem;color:var(--text2)}
+  .cat-item:hover,.cat-item.active{background:var(--bg3);color:var(--text)}
+  .cat-item.active{border-left:2px solid var(--accent);padding-left:calc(.75rem - 2px)}
+  .cat-dot{width:8px;height:8px;border-radius:50%;margin-right:8px;flex-shrink:0}
+  .cat-count{font-size:.75rem;color:var(--text3);background:var(--bg4);padding:1px 7px;border-radius:10px}
+  .sidebar-divider{height:1px;background:var(--border);margin:.5rem 0}
+
+  /* POST FEED */
+  .feed-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+  .feed-header h2{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:600}
+  .filter-tabs{display:flex;gap:4px;background:var(--bg3);border-radius:var(--radius);padding:3px}
+  .tab{padding:.35rem .75rem;border-radius:8px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:all .15s;border:none;background:transparent;font-family:'DM Sans',sans-serif}
+  .tab.active{background:var(--bg);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+
+  /* POST CARD */
+  .post-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;margin-bottom:.85rem;transition:border-color .2s,transform .15s;cursor:pointer}
+  .post-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+  .post-card.solved{border-left:3px solid var(--green)}
+  .post-top{display:flex;align-items:flex-start;gap:12px}
+  .vote-col{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:32px}
+  .vote-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .15s;line-height:1}
+  .vote-btn:hover{background:var(--accent-glow);border-color:var(--accent);color:var(--accent)}
+  .vote-count{font-size:.8rem;font-weight:600;color:var(--text)}
+  .post-body{flex:1}
+  .post-meta{display:flex;align-items:center;gap:8px;margin-bottom:.5rem;flex-wrap:wrap}
+  .post-author{font-size:.8rem;color:var(--text3)}
+  .tag{font-size:.73rem;padding:2px 9px;border-radius:20px;font-weight:500}
+  .tag-tech{background:rgba(79,124,255,.15);color:#7BA8FF}
+  .tag-funding{background:rgba(245,166,35,.12);color:#F5A623}
+  .tag-marketing{background:rgba(167,139,250,.12);color:#A78BFA}
+  .tag-hr{background:rgba(45,212,160,.12);color:#2DD4A0}
+  .tag-legal{background:rgba(255,94,94,.12);color:#FF8080}
+  .tag-product{background:rgba(248,113,113,.1);color:#fb923c}
+  .tag-other{background:var(--bg4);color:var(--text2)}
+  .solved-badge{background:rgba(45,212,160,.15);color:var(--green);font-size:.72rem;padding:2px 9px;border-radius:20px;font-weight:500}
+  .post-title{font-family:'Sora',sans-serif;font-size:.97rem;font-weight:600;margin-bottom:.4rem;line-height:1.4;color:var(--text)}
+  .post-excerpt{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:.75rem}
+  .post-footer{display:flex;align-items:center;gap:1.25rem}
+  .post-stat{display:flex;align-items:center;gap:4px;font-size:.8rem;color:var(--text3)}
+  .post-stat svg{width:14px;height:14px;opacity:.7}
+  .avatar{width:26px;height:26px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;flex-shrink:0}
+  .post-time{margin-left:auto;font-size:.77rem;color:var(--text3)}
+
+  /* POST INPUT */
+  .post-input{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;cursor:pointer;transition:border-color .2s}
+  .post-input:hover{border-color:var(--accent)}
+  .input-row{display:flex;align-items:center;gap:10px}
+  .input-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;flex-shrink:0}
+  .input-placeholder{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.55rem 1rem;font-size:.875rem;color:var(--text3);font-family:'DM Sans',sans-serif}
+
+  /* RIGHT PANEL */
+  .right-panel{display:flex;flex-direction:column;gap:1.25rem}
+  .panel-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem}
+  .panel-title{font-family:'Sora',sans-serif;font-size:.88rem;font-weight:600;margin-bottom:.9rem;color:var(--text)}
+  .trending-item{display:flex;align-items:flex-start;gap:8px;padding:.5rem 0;border-bottom:1px solid var(--border);cursor:pointer}
+  .trending-item:last-child{border-bottom:none;padding-bottom:0}
+  .trend-num{font-size:.8rem;font-weight:700;color:var(--text3);min-width:18px;margin-top:1px}
+  .trend-text{font-size:.83rem;color:var(--text2);line-height:1.4;transition:color .2s}
+  .trending-item:hover .trend-text{color:var(--text)}
+  .expert-row{display:flex;align-items:center;gap:10px;padding:.5rem 0;border-bottom:1px solid var(--border)}
+  .expert-row:last-child{border-bottom:none}
+  .expert-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;flex-shrink:0}
+  .expert-name{font-size:.84rem;font-weight:500;color:var(--text)}
+  .expert-role{font-size:.76rem;color:var(--text3)}
+  .expert-follow{margin-left:auto;background:transparent;border:1px solid var(--border2);color:var(--text2);padding:.28rem .65rem;border-radius:6px;font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+  .expert-follow:hover{border-color:var(--accent);color:var(--accent)}
+  .earn-row{display:flex;align-items:center;gap:10px;padding:.45rem 0}
+  .earn-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+  .earn-label{font-size:.83rem;color:var(--text);font-weight:500}
+  .earn-sub{font-size:.76rem;color:var(--text3)}
+
+  .new-post-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(4px)}
+  .new-post-modal.open{display:flex}
+  .modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:1.75rem;width:100%;max-width:540px;max-height:90vh;overflow-y:auto}
+  .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+  .modal-header h3{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:600}
+  .modal-close{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;line-height:1}
+  .form-group{margin-bottom:1rem}
+  .form-label{font-size:.82rem;color:var(--text2);margin-bottom:.4rem;display:block;font-weight:500}
+  .form-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:.6rem .9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.875rem;outline:none;transition:border-color .2s}
+  .form-input:focus{border-color:var(--accent)}
+  .form-textarea{min-height:100px;resize:vertical}
+  .form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239AA0B5' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center;cursor:pointer}
+  .submit-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:.7rem;border-radius:var(--radius);font-size:.9rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:.5rem;transition:background .2s}
+  .submit-btn:hover{background:var(--accent2)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><div class="logo-dot"></div>StartupSolve</div>
+  <div class="nav-links">
+    <a href="#">Explore</a>
+    <a href="#">Experts</a>
+    <a href="#">Jobs <span class="badge-count">12</span></a>
+    <a href="#">Newsletter</a>
+  </div>
+  <button class="nav-cta" onclick="openModal()">+ Post Problem</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">🌱 Community for Startup Teams</div>
+  <h1>Every startup problem<br>deserves a <span>real answer</span></h1>
+  <p>Post any problem — small or big. Get solutions from founders, experts, and the startup community. It's free, open, and honest.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="openModal()">Post Your Problem</button>
+    <button class="btn-secondary">Browse Problems</button>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">4,812</div><div class="stat-label">Problems posted</div></div>
+  <div class="stat"><div class="stat-num">3,190</div><div class="stat-label">Solved ✓</div></div>
+  <div class="stat"><div class="stat-num">918</div><div class="stat-label">Active members</div></div>
+  <div class="stat"><div class="stat-num">127</div><div class="stat-label">Verified experts</div></div>
+</div>
+
+<div class="main">
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Categories</div>
+    <div class="cat-item active" onclick="filterCat(this)"><span style="display:flex;align-items:center"><div class="cat-dot" style="background:#4F7CFF"></div>All Problems</span><span class="cat-count">4.8k</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span style="display:flex;align-items:center"><div class="cat-dot" style="background:#7BA8FF"></div>Tech &amp; Dev</span><span class="cat-count">1.2k</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span style="display:flex;align-items:center"><div class="cat-dot" style="background:#F5A623"></div>Funding</span><span class="cat-count">893</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span style="display:flex;align-items:center"><div class="cat-dot" style="background:#A78BFA"></div>Marketing</span><span class="cat-count">741</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span style="display:flex;align-items:center"><div class="cat-dot" style="background:#2DD4A0"></div>HR &amp; Team</span><span class="cat-count">530</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span style="display:flex;align-items:center"><div class="cat-dot" style="background:#FF8080"></div>Legal</span><span class="cat-count">318</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span style="display:flex;align-items:center"><div class="cat-dot" style="background:#fb923c"></div>Product</span><span class="cat-count">612</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span style="display:flex;align-items:center"><div class="cat-dot" style="background:#636879"></div>Other</span><span class="cat-count">502</span></div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-title">Filter</div>
+    <div class="cat-item" onclick="filterCat(this)"><span>🔥 Trending</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span>✅ Solved</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span>⏰ Recent</span></div>
+    <div class="cat-item" onclick="filterCat(this)"><span>💬 Most Replies</span></div>
+  </aside>
+
+  <!-- MAIN FEED -->
+  <main>
+    <div class="post-input" onclick="openModal()">
+      <div class="input-row">
+        <div class="input-avatar">YO</div>
+        <div class="input-placeholder">What problem is your startup facing today?</div>
+      </div>
+    </div>
+
+    <div class="feed-header">
+      <h2>Latest Problems</h2>
+      <div class="filter-tabs">
+        <button class="tab active" onclick="setTab(this)">Newest</button>
+        <button class="tab" onclick="setTab(this)">Hot</button>
+        <button class="tab" onclick="setTab(this)">Top</button>
+      </div>
+    </div>
+
+    <!-- POSTS -->
+    <div class="post-card">
+      <div class="post-top">
+        <div class="vote-col">
+          <button class="vote-btn" onclick="vote(this, 1)">▲</button>
+          <span class="vote-count">47</span>
+          <button class="vote-btn" onclick="vote(this, -1)">▼</button>
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <div class="avatar" style="background:linear-gradient(135deg,#4F7CFF,#A78BFA);color:#fff">RK</div>
+            <span class="post-author">Rahul K. • Bangalore</span>
+            <span class="tag tag-funding">Funding</span>
+          </div>
+          <div class="post-title">How do I approach angel investors when I have no connections in the ecosystem?</div>
+          <div class="post-excerpt">I'm building a B2B SaaS for SMEs in Tier 2 cities. No IIT/IIM network, no warm intros. Cold LinkedIn messages get ignored. What actually works for first-time founders?</div>
+          <div class="post-footer">
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>28 replies</span>
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>312 views</span>
+            <span class="post-time">2 hours ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card solved">
+      <div class="post-top">
+        <div class="vote-col">
+          <button class="vote-btn" onclick="vote(this, 1)">▲</button>
+          <span class="vote-count">89</span>
+          <button class="vote-btn" onclick="vote(this, -1)">▼</button>
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <div class="avatar" style="background:linear-gradient(135deg,#2DD4A0,#4F7CFF);color:#fff">AM</div>
+            <span class="post-author">Aisha M. • Kochi</span>
+            <span class="tag tag-tech">Tech</span>
+            <span class="solved-badge">✓ Solved</span>
+          </div>
+          <div class="post-title">Our app crashes only on Android 12 with 3GB RAM — can't reproduce on test devices</div>
+          <div class="post-excerpt">Flutter app works fine on emulators and high-end devices. But 40% of our user base (budget phones) crashes on the payments screen. Firebase Crashlytics shows OutOfMemoryError.</div>
+          <div class="post-footer">
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>41 replies</span>
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>876 views</span>
+            <span class="post-time">Yesterday</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-top">
+        <div class="vote-col">
+          <button class="vote-btn" onclick="vote(this, 1)">▲</button>
+          <span class="vote-count">33</span>
+          <button class="vote-btn" onclick="vote(this, -1)">▼</button>
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <div class="avatar" style="background:linear-gradient(135deg,#F5A623,#FF8080);color:#fff">PS</div>
+            <span class="post-author">Priya S. • Chennai</span>
+            <span class="tag tag-hr">HR &amp; Team</span>
+          </div>
+          <div class="post-title">Co-founder wants to leave after 8 months — how do we handle the equity split?</div>
+          <div class="post-excerpt">We have a verbal agreement but no vesting schedule in writing. He contributed mostly in ideation phase. We're about to get our first customer. What are our options legally and fairly?</div>
+          <div class="post-footer">
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>19 replies</span>
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>547 views</span>
+            <span class="post-time">3 hours ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card">
+      <div class="post-top">
+        <div class="vote-col">
+          <button class="vote-btn" onclick="vote(this, 1)">▲</button>
+          <span class="vote-count">21</span>
+          <button class="vote-btn" onclick="vote(this, -1)">▼</button>
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <div class="avatar" style="background:linear-gradient(135deg,#A78BFA,#FF8080);color:#fff">VN</div>
+            <span class="post-author">Vikram N. • Hyderabad</span>
+            <span class="tag tag-marketing">Marketing</span>
+          </div>
+          <div class="post-title">Spent ₹80k on Meta ads, got 4 sign-ups. What am I doing wrong?</div>
+          <div class="post-excerpt">SaaS product for restaurant owners. Targeting India, age 25-45, restaurant/food interest. CTR is 2.1% but almost zero conversions. Landing page has 3% bounce. Please help!</div>
+          <div class="post-footer">
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>35 replies</span>
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>1.1k views</span>
+            <span class="post-time">5 hours ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-card solved">
+      <div class="post-top">
+        <div class="vote-col">
+          <button class="vote-btn" onclick="vote(this, 1)">▲</button>
+          <span class="vote-count">62</span>
+          <button class="vote-btn" onclick="vote(this, -1)">▼</button>
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <div class="avatar" style="background:linear-gradient(135deg,#2DD4A0,#A78BFA);color:#fff">KJ</div>
+            <span class="post-author">Keerthana J. • Kochi</span>
+            <span class="tag tag-legal">Legal</span>
+            <span class="solved-badge">✓ Solved</span>
+          </div>
+          <div class="post-title">Do I need a separate privacy policy for my WhatsApp Business API integration?</div>
+          <div class="post-excerpt">We collect user phone numbers via WhatsApp chatbot for our delivery startup. Currently our privacy policy only mentions website data. Are we legally exposed?</div>
+          <div class="post-footer">
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>14 replies</span>
+            <span class="post-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>423 views</span>
+            <span class="post-time">2 days ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="panel-card">
+      <div class="panel-title">🔥 Trending Today</div>
+      <div class="trending-item"><span class="trend-num">1</span><span class="trend-text">How to get KSIM grant without CA firm?</span></div>
+      <div class="trending-item"><span class="trend-num">2</span><span class="trend-text">React Native vs Flutter for India 2025</span></div>
+      <div class="trending-item"><span class="trend-num">3</span><span class="trend-text">Cheapest way to register a private ltd</span></div>
+      <div class="trending-item"><span class="trend-num">4</span><span class="trend-text">First hire: tech or sales?</span></div>
+      <div class="trending-item"><span class="trend-num">5</span><span class="trend-text">Our MVP got 200 users — now what?</span></div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-title">⭐ Verified Experts</div>
+      <div class="expert-row">
+        <div class="expert-av" style="background:linear-gradient(135deg,#4F7CFF,#A78BFA)">SK</div>
+        <div><div class="expert-name">Sandeep Kumar</div><div class="expert-role">Startup Lawyer · Bangalore</div></div>
+        <button class="expert-follow">Follow</button>
+      </div>
+      <div class="expert-row">
+        <div class="expert-av" style="background:linear-gradient(135deg,#2DD4A0,#4F7CFF)">NM</div>
+        <div><div class="expert-name">Nisha Menon</div><div class="expert-role">VC Analyst · Kochi</div></div>
+        <button class="expert-follow">Follow</button>
+      </div>
+      <div class="expert-row">
+        <div class="expert-av" style="background:linear-gradient(135deg,#F5A623,#FF8080)">AR</div>
+        <div><div class="expert-name">Arjun Rao</div><div class="expert-role">Growth Hacker · Mumbai</div></div>
+        <button class="expert-follow">Follow</button>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-title">💰 How We Earn</div>
+      <div class="earn-row">
+        <div class="earn-icon" style="background:rgba(79,124,255,.12)">📢</div>
+        <div><div class="earn-label">Sponsored posts</div><div class="earn-sub">Startup tools &amp; services</div></div>
+      </div>
+      <div class="earn-row">
+        <div class="earn-icon" style="background:rgba(245,166,35,.12)">💼</div>
+        <div><div class="earn-label">Job board</div><div class="earn-sub">Paid startup listings</div></div>
+      </div>
+      <div class="earn-row">
+        <div class="earn-icon" style="background:rgba(167,139,250,.12)">🎓</div>
+        <div><div class="earn-label">Expert consultations</div><div class="earn-sub">20% commission</div></div>
+      </div>
+      <div class="earn-row">
+        <div class="earn-icon" style="background:rgba(45,212,160,.12)">⭐</div>
+        <div><div class="earn-label">Premium membership</div><div class="earn-sub">Priority answers</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="new-post-modal" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Post a Problem</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Problem Title *</label>
+      <input class="form-input" type="text" placeholder="Short, clear title — e.g. 'How to find first customers without a network?'" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Describe your problem *</label>
+      <textarea class="form-input form-textarea" placeholder="Give as much context as possible. What have you tried? What's your situation?"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-input form-select">
+        <option>Tech &amp; Development</option>
+        <option>Funding &amp; Investment</option>
+        <option>Marketing &amp; Growth</option>
+        <option>HR &amp; Team</option>
+        <option>Legal &amp; Compliance</option>
+        <option>Product &amp; Design</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Your startup stage</label>
+      <select class="form-input form-select">
+        <option>Idea stage</option>
+        <option>Building MVP</option>
+        <option>MVP launched</option>
+        <option>Early revenue</option>
+        <option>Growing / scaling</option>
+      </select>
+    </div>
+    <button class="submit-btn" onclick="submitPost()">Post Problem →</button>
+  </div>
+</div>
+
+<script>
+function openModal(){document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function closeModalOutside(e){if(e.target===document.getElementById('modal'))closeModal()}
+function filterCat(el){document.querySelectorAll('.cat-item').forEach(i=>i.classList.remove('active'));el.classList.add('active')}
+function setTab(el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function vote(btn,dir){
+  const col=btn.closest('.vote-col');
+  const cnt=col.querySelector('.vote-count');
+  cnt.textContent=parseInt(cnt.textContent)+dir;
+  if(dir>0)cnt.style.color='#4F7CFF';else cnt.style.color='#FF8080';
+  setTimeout(()=>cnt.style.color='',600)
+}
+function submitPost(){
+  alert('Problem posted! The community will start helping you shortly.');
+  closeModal();
+}
+</script>
+</body>
+</html>
