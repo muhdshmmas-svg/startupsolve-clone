@@ -463,5 +463,24 @@ function submitPost(){
   closeModal();
 }
 </script>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA1mxUxk_qbGFLzsxjlwBg_JpbK9QCarzE",
+    authDomain: "startupsolve-4cea8.firebaseapp.com",
+    projectId: "startupsolve-4cea8",
+    storageBucket: "startupsolve-4cea8.firebasestorage.app",
+    messagingSenderId: "402367679444",
+    appId: "1:402367679444:web:415b028344c7dbb9126441",
+    measurementId: "G-SJHKFLBV3Q"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  console.log("Firebase Connected!");
+</script>
 </body>
 </html>
