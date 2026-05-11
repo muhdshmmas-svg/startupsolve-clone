@@ -463,9 +463,20 @@ function submitPost(){
   closeModal();
 }
 </script>
-  <script type="module">
+ <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyA1mxUxk_qbGFLzsxjlwBg_JpbK9QCarzE",
@@ -480,7 +491,44 @@ function submitPost(){
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  async function login() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      alert("Welcome " + result.user.displayName);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function createPost() {
+    const title = prompt("Enter problem title");
+    const content = prompt("Describe your startup problem");
+
+    if (!title || !content) return;
+
+    try {
+      await addDoc(collection(db, "posts"), {
+        title,
+        content,
+        createdAt: new Date()
+      });
+
+      alert("Post created successfully!");
+    } catch (e) {
+      console.error(e);
+      alert("Error creating post");
+    }
+  }
+
+  window.login = login;
+  window.createPost = createPost;
+
   console.log("Firebase Connected!");
 </script>
+   
 </body>
 </html>
